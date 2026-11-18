@@ -1,0 +1,9 @@
+{
+  "extends": "@mapringg/standard/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["dom", "esnext"],
+    "types": ["expo/types"],
+    "customConditions": ["react-native"]
+  },
+  "include": ["src", ".expo/types/**/*.ts", "expo-env.d.ts"]
+}

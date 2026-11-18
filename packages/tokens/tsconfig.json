@@ -1,0 +1,4 @@
+{
+  "extends": "@mapringg/standard/tsconfig.json",
+  "include": ["src"]
+}

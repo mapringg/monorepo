@@ -1,0 +1,8 @@
+{
+  "extends": "@mapringg/standard/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "types": ["node"]
+  },
+  "include": ["src", "tsdown.config.ts", "vitest.config.ts"]
+}

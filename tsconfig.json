@@ -1,0 +1,27 @@
+{
+  "extends": "@mapringg/standard/tsconfig.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/api"
+    },
+    {
+      "path": "./apps/web"
+    },
+    {
+      "path": "./apps/liff"
+    },
+    {
+      "path": "./apps/marketing"
+    },
+    {
+      "path": "./apps/mobile"
+    },
+    {
+      "path": "./packages/i18n"
+    },
+    {
+      "path": "./packages/tokens"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "extends": "@mapringg/standard/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", "src", "e2e", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "*.ts"],
+  "exclude": ["node_modules"]
+}

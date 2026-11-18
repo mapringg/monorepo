@@ -1,0 +1,77 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  "@astrojs/check": 0.9.12
+  "@astrojs/react": 7.1.9
+  "@base-ui/react": 1.9.0
+  "@expo/metro-runtime": ~58.0.17
+  "@hono/node-server": 2.1.9
+  "@jest/globals": 30.5.2
+  "@line/liff": 2.32.0
+  "@playwright/test": 1.65.1
+  "@react-native-community/netinfo": 12.0.1
+  "@rn-primitives/label": 1.5.2
+  "@scalar/hono-api-reference": 0.12.22
+  "@standard-schema/spec": 1.1.0
+  "@shopify/flash-list": 2.3.2
+  "@tailwindcss/postcss": 4.3.5
+  "@tailwindcss/vite": 4.3.5
+  "@tanstack/react-query": 5.108.0
+  "@tanstack/react-router": 1.170.46
+  "@tanstack/router-cli": 1.168.0
+  "@tanstack/router-plugin": 1.169.0
+  "@testing-library/react-native": 14.1.0
+  "@types/node": 26.6.6
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
+  "@vitejs/plugin-react": 6.3.0
+  astro: 7.4.12
+  babel-plugin-react-compiler: 1.0.0
+  expo: 58.0.26
+  expo-constants: ~58.0.16
+  expo-linking: ~58.0.17
+  expo-notifications: ~58.1.9
+  expo-router: ~58.0.32
+  hono: 4.13.19
+  hono-openapi: 1.6.0
+  jest: 30.5.2
+  jest-expo: ~58.0.15
+  knip: 6.45.1
+  msw: 2.9.0
+  next: 16.4.6
+  oxfmt: 0.79.0
+  oxlint: 1.94.0
+  react: 19.3.0
+  react-dom: 19.3.0
+  react-native: 0.88.1
+  react-native-safe-area-context: ~5.11.1
+  react-native-screens: ~4.30.1
+  react-native-web: ~0.21.4
+  server-only: 0.0.1
+  tailwindcss: 4.3.5
+  tsdown: 0.23.7
+  tsrs: 0.25.0-ts7.1.0-beta
+  tsx: 4.23.15
+  typescript: 7.0.2
+  uniwind: 1.14.0
+  vite: 8.3.8
+  vitest: 5.1.1
+  zod: 4.6.7
+
+catalogs:
+  astro-check:
+    typescript: 6.0.3
+
+allowBuilds:
+  "@parcel/watcher": false
+  esbuild: true
+  msw: false
+  sharp: true
+
+minimumReleaseAgeExclude:
+  - "@vitest/mocker@5.1.1"
+  - "@vitest/spy@5.1.1"
+  - vitest@5.1.1
+  - msw@3.0.7
