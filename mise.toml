@@ -1,3 +1,4 @@
 [tools]
+"npm:agent-browser" = "0.43.0"
 node = "26.13.1"
 pnpm = "12.18.0"
