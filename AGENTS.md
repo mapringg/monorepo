@@ -10,7 +10,5 @@ Follow `@mapringg/standard`; `pnpm lint` enforces it. Read the `AGENTS.md` of ev
 
 ## Sources
 
-- Follow the standard's [test audit](node_modules/@mapringg/standard/.claude/skills/test-audit/SKILL.md) before a migration or broad refactor.
-- Follow the standard's [review workflow](node_modules/@mapringg/standard/.claude/skills/review-standard/SKILL.md) when reviewing a diff.
-- Follow the standard's [PR writing skill](node_modules/@mapringg/standard/.claude/skills/pr/SKILL.md) when starting a change or writing a pull request.
-- Follow the standard's [upgrade skill](node_modules/@mapringg/standard/.claude/skills/upgrade-standard/SKILL.md) when upgrading @mapringg/standard.
+- Use [PR writing](node_modules/@mapringg/standard/.claude/skills/pr/SKILL.md) when writing a pull request.
+- Follow [Capture](node_modules/@mapringg/standard/.claude/skills/capture/SKILL.md) when preparing pull request evidence.
