@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  push:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: jdx/mise-action@v3
+      - run: pnpm install --frozen-lockfile
+      - name: Checks and affected tests
+        if: github.event_name == 'pull_request'
+        run: .githooks/pre-push
+      - name: Checks
+        if: github.event_name == 'push'
+        run: |
+          pnpm format:check
+          pnpm lint
+          pnpm --filter marketing check
+          pnpm knip
+      - name: All tests
+        if: github.event_name == 'push'
+        run: pnpm test
+      - name: Keeper journeys
+        if: github.event_name == 'push'
+        run: |
+          pnpm --filter web exec playwright install --with-deps chromium
+          pnpm --filter web test:e2e
+      - name: Keep the journey traces
+        if: failure() && github.event_name == 'push'
+        uses: actions/upload-artifact@v5
+        with:
+          name: journey-traces
+          path: apps/web/test-results
+          retention-days: 7

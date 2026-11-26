@@ -1,0 +1,26 @@
+export const errorsMessages = {
+  en: {
+    "errors.invalid_request": "The request is invalid.",
+    "errors.unauthenticated": "Sign in to continue.",
+    "errors.forbidden": "You do not have access to this resource.",
+    "errors.not_found": "The resource was not found.",
+    "errors.conflict": "The resource changed. Try again.",
+    "errors.rate_limited": "Too many requests. Try again later.",
+    "errors.internal": "Something went wrong.",
+    "errors.upstream_error": "A service we depend on failed.",
+    "errors.unavailable": "The service is unavailable.",
+    "errors.upstream_timeout": "A service we depend on timed out.",
+  },
+  th: {
+    "errors.invalid_request": "คำขอไม่ถูกต้อง",
+    "errors.unauthenticated": "กรุณาเข้าสู่ระบบ",
+    "errors.forbidden": "คุณไม่มีสิทธิ์เข้าถึง",
+    "errors.not_found": "ไม่พบข้อมูล",
+    "errors.conflict": "ข้อมูลมีการเปลี่ยนแปลง กรุณาลองอีกครั้ง",
+    "errors.rate_limited": "มีคำขอมากเกินไป กรุณาลองใหม่ภายหลัง",
+    "errors.internal": "เกิดข้อผิดพลาด",
+    "errors.upstream_error": "บริการภายนอกขัดข้อง",
+    "errors.unavailable": "บริการไม่พร้อมใช้งาน",
+    "errors.upstream_timeout": "บริการภายนอกไม่ตอบสนอง",
+  },
+} as const;

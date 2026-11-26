@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+base=origin/develop
+git rev-parse --verify --quiet "$base" >/dev/null || base=origin/main
+
+pnpm format:check
+pnpm lint
+pnpm --filter marketing check
+pnpm knip
+
+if git diff --name-only "$base"...HEAD | grep -qE '^(pnpm-lock\.yaml|pnpm-workspace\.yaml|package\.json|mise\.toml|tsconfig\.json|\.oxlintrc\.json|packages/)|(vitest|jest|playwright)\.config\.|tsconfig\.json$'; then
+  pnpm -r --if-present test
+else
+  pnpm --filter "...[$base]" --if-present test:changed "$base"
+fi

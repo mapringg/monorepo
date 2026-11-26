@@ -1,0 +1,17 @@
+---
+import BaseLayout from "#/components/layout/base-layout.astro";
+import { HomeHero } from "#/features/home/home-hero.tsx";
+import { env } from "#/lib/env.ts";
+import { localeFrom, tFor } from "#/lib/i18n.ts";
+import { locales } from "@repo/i18n";
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const locale = localeFrom(Astro.params.locale);
+---
+
+<BaseLayout locale={locale} title={tFor(locale)("home.metaTitle")}>
+  <HomeHero locale={locale} appUrl={`${env.PUBLIC_SITE_URL}/notes`} />
+</BaseLayout>

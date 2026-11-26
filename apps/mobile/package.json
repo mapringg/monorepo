@@ -1,0 +1,51 @@
+{
+  "name": "mobile",
+  "private": true,
+  "main": "expo-router/entry",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "android": "expo run:android",
+    "build": "expo export --platform all",
+    "dev": "expo start",
+    "ios": "expo run:ios",
+    "prepare": "uniwind generate-artifacts --css ./src/global.css --dts ./src/uniwind-types.d.ts",
+    "test": "jest --ci",
+    "test:changed": "jest --ci --passWithNoTests --changedSince"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "catalog:",
+    "@react-native-community/netinfo": "catalog:",
+    "@repo/i18n": "workspace:*",
+    "@repo/tokens": "workspace:*",
+    "@rn-primitives/label": "catalog:",
+    "@shopify/flash-list": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "api": "workspace:*",
+    "expo": "catalog:",
+    "expo-constants": "catalog:",
+    "expo-linking": "catalog:",
+    "expo-notifications": "catalog:",
+    "expo-router": "catalog:",
+    "hono": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "react-native": "catalog:",
+    "react-native-safe-area-context": "catalog:",
+    "react-native-screens": "catalog:",
+    "react-native-web": "catalog:",
+    "tailwindcss": "catalog:",
+    "uniwind": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@jest/globals": "catalog:",
+    "@testing-library/react-native": "catalog:",
+    "@types/react": "catalog:",
+    "jest": "catalog:",
+    "jest-expo": "catalog:",
+    "msw": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,33 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment that holds the target's variables and secrets
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v5
+      - uses: jdx/mise-action@v3
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter api --filter web build
+      - name: Deploy the API
+        run: echo "Deploy apps/api/dist to $TARGET"
+        env:
+          TARGET: ${{ inputs.environment }}
+      - name: Deploy the web app
+        run: echo "Deploy apps/web/.next to $TARGET"
+        env:
+          TARGET: ${{ inputs.environment }}

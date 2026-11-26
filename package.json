@@ -1,0 +1,24 @@
+{
+  "name": "monorepo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
+    "lint": "oxlint",
+    "format": "oxfmt -c node_modules/@mapringg/standard/oxfmt.json",
+    "format:check": "oxfmt -c node_modules/@mapringg/standard/oxfmt.json --check",
+    "knip": "knip -c node_modules/@mapringg/standard/knip.json && knip -c node_modules/@mapringg/standard/knip.json --production",
+    "test": "pnpm -r --if-present test"
+  },
+  "devDependencies": {
+    "@mapringg/standard": "github:mapringg/standard#v1.10.0",
+    "knip": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "tsrs": "catalog:"
+  },
+  "engines": {
+    "node": "26.13.1"
+  },
+  "packageManager": "pnpm@12.18.0"
+}

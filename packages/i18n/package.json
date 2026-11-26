@@ -1,0 +1,15 @@
+{
+  "name": "@repo/i18n",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/i18n.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:changed": "vitest run --changed"
+  },
+  "devDependencies": {
+    "vitest": "catalog:"
+  }
+}
