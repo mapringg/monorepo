@@ -5,6 +5,8 @@ runs:
   using: composite
   steps:
     - uses: jdx/mise-action@v3
+      with:
+        install_args: node pnpm
     - id: pnpm-store
       shell: bash
       run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
