@@ -1,0 +1,11 @@
+name: Setup
+description: Install mise tools and dependencies.
+
+runs:
+  using: composite
+  steps:
+    - uses: jdx/mise-action@v3
+      with:
+        install_args: node pnpm
+    - shell: bash
+      run: pnpm install --frozen-lockfile

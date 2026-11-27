@@ -12,6 +12,7 @@ concurrency:
 
 permissions:
   contents: read
+  checks: read
 
 jobs:
   check:
@@ -21,12 +22,45 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Scan for leaks
-        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact
-      - uses: jdx/mise-action@v3
-      - run: pnpm install --frozen-lockfile
+      # The leak scan reads a copy of the checkout, so files that later steps write stay out
+      # of it. It pulls and runs in the background, and the last step reads its result.
+      - name: Start the leak scan
+        run: |
+          scan="$RUNNER_TEMP/scan"
+          git worktree add --detach --quiet "$scan" HEAD
+          docker run --detach --name gitleaks -v "$scan:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact > "$RUNNER_TEMP/gitleaks-start.log" 2>&1 &
+      - uses: ./.github/actions/setup
+      # Editing the title or body reruns Check for standard/pr-check. If this commit already
+      # passed Check, only the PR check needs to run again.
+      - name: Find an earlier pass of this commit
+        id: earlier
+        if: github.event.action == 'edited' && !github.event.changes.base
+        # Every passing Check ran the full checks once, since an edit only reuses a pass that exists.
+        run: |
+          # shellcheck disable=SC2016
+          node --input-type=module -e '
+            const url = `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}/commits/${process.env.SHA}/check-runs?check_name=Check&status=completed&per_page=100`;
+            const response = await fetch(url, { headers: { authorization: `Bearer ${process.env.GITHUB_TOKEN}` } });
+            const runs = response.ok ? (await response.json()).check_runs : [];
+            console.log(`passed=${runs.some((run) => run.conclusion === "success")}`);
+          ' >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+      - name: PR check
+        if: steps.earlier.outputs.passed == 'true'
+        run: pnpm exec check-pr
+      # Each commit saves its own cache and restores the newest one, so shared code changes count too.
+      - uses: actions/cache@v5
+        if: github.event_name == 'push'
+        with:
+          path: apps/web/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-
       - name: Checks and affected tests
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.earlier.outputs.passed != 'true'
         run: .githooks/pre-push
       - name: Checks
         if: github.event_name == 'push'
@@ -38,11 +72,27 @@ jobs:
       - name: All tests
         if: github.event_name == 'push'
         run: pnpm test
+      - name: Find the Playwright version
+        if: github.event_name == 'push'
+        id: playwright
+        run: echo "version=$(pnpm --filter web exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - name: Restore the Playwright browsers
+        if: github.event_name == 'push'
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-shell-${{ steps.playwright.outputs.version }}
+      - name: Install Chromium
+        if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter web exec playwright install --with-deps --only-shell chromium
+      # A cached browser still needs its system libraries, which live outside the cache.
+      - name: Install Chromium's system libraries
+        if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm --filter web exec playwright install-deps chromium
       - name: Keeper journeys
         if: github.event_name == 'push'
-        run: |
-          pnpm --filter web exec playwright install --with-deps chromium
-          pnpm --filter web test:e2e
+        run: pnpm --filter web test:e2e
       - name: Keep the journey traces
         if: failure() && github.event_name == 'push'
         uses: actions/upload-artifact@v5
@@ -50,3 +100,15 @@ jobs:
           name: journey-traces
           path: apps/web/test-results
           retention-days: 7
+      - name: Leak scan
+        if: always()
+        run: |
+          for _ in $(seq 120); do
+            docker inspect --format '{{.Id}}' gitleaks > /dev/null 2>&1 && break
+            sleep 1
+          done
+          docker inspect --format '{{.Id}}' gitleaks > /dev/null 2>&1 || { cat "$RUNNER_TEMP/gitleaks-start.log"; exit 1; }
+          status=$(docker wait gitleaks)
+          docker logs gitleaks
+          docker rm gitleaks > /dev/null
+          exit "$status"
