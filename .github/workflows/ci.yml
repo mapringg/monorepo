@@ -23,8 +23,14 @@ jobs:
           fetch-depth: 0
       - name: Scan for leaks
         run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact
-      - uses: jdx/mise-action@v3
-      - run: pnpm install --frozen-lockfile
+      - uses: ./.github/actions/setup
+      - uses: actions/cache@v5
+        with:
+          path: apps/web/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/web/**') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-
       - name: Checks and affected tests
         if: github.event_name == 'pull_request'
         run: .githooks/pre-push
@@ -38,11 +44,27 @@ jobs:
       - name: All tests
         if: github.event_name == 'push'
         run: pnpm test
+      - name: Find the Playwright version
+        if: github.event_name == 'push'
+        id: playwright
+        run: echo "version=$(pnpm --filter web exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+      - name: Restore the Playwright browsers
+        if: github.event_name == 'push'
+        id: playwright-cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+      - name: Install Chromium
+        if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter web exec playwright install --with-deps chromium
+      # A cached browser still needs its system libraries, which live outside the cache.
+      - name: Install Chromium's system libraries
+        if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm --filter web exec playwright install-deps chromium
       - name: Keeper journeys
         if: github.event_name == 'push'
-        run: |
-          pnpm --filter web exec playwright install --with-deps chromium
-          pnpm --filter web test:e2e
+        run: pnpm --filter web test:e2e
       - name: Keep the journey traces
         if: failure() && github.event_name == 'push'
         uses: actions/upload-artifact@v5

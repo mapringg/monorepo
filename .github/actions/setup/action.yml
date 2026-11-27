@@ -1,0 +1,18 @@
+name: Setup
+description: Install mise tools, restore the pnpm store cache, and install dependencies.
+
+runs:
+  using: composite
+  steps:
+    - uses: jdx/mise-action@v3
+    - id: pnpm-store
+      shell: bash
+      run: echo "path=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+    - uses: actions/cache@v5
+      with:
+        path: ${{ steps.pnpm-store.outputs.path }}
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-
+    - shell: bash
+      run: pnpm install --frozen-lockfile
