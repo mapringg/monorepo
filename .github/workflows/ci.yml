@@ -7,8 +7,6 @@ on:
     branches: [develop, main]
 
 concurrency:
-  # A merged PR's github.ref is its base branch, so keying PR runs by ref let an edit right
-  # after a merge cancel the base branch's push run. PR runs key on their number instead.
   group: ci-${{ github.event.pull_request.number && format('pr-{0}', github.event.pull_request.number) || github.ref }}
   cancel-in-progress: true
 
@@ -24,20 +22,15 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      # The leak scan reads a copy of the checkout, so files that later steps write stay out
-      # of it. It pulls and runs in the background, and the last step reads its result.
       - name: Start the leak scan
         run: |
           scan="$RUNNER_TEMP/scan"
           git worktree add --detach --quiet "$scan" HEAD
           docker run --detach --name gitleaks -v "$scan:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact > "$RUNNER_TEMP/gitleaks-start.log" 2>&1 &
       - uses: ./.github/actions/setup
-      # Editing the title or body reruns Check for standard/pr-check. If this commit already
-      # passed Check, only the PR check needs to run again.
       - name: Find an earlier pass of this commit
         id: earlier
         if: github.event.action == 'edited' && !github.event.changes.base
-        # Every passing Check ran the full checks once, since an edit only reuses a pass that exists.
         run: |
           # shellcheck disable=SC2016
           node --input-type=module -e '
@@ -52,7 +45,6 @@ jobs:
       - name: PR check
         if: steps.earlier.outputs.passed == 'true'
         run: pnpm exec check-pr
-      # Each commit saves its own cache and restores the newest one, so shared code changes count too.
       - uses: actions/cache@v5
         if: github.event_name == 'push'
         with:
@@ -88,7 +80,6 @@ jobs:
       - name: Install Chromium
         if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm --filter web exec playwright install --with-deps --only-shell chromium
-      # A cached browser still needs its system libraries, which live outside the cache.
       - name: Install Chromium's system libraries
         if: github.event_name == 'push' && steps.playwright-cache.outputs.cache-hit == 'true'
         run: pnpm --filter web exec playwright install-deps chromium

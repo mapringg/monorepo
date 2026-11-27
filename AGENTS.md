@@ -12,4 +12,3 @@
 
 - Use [PR writing](node_modules/@mapringg/standard/.claude/skills/pr/SKILL.md) when writing a pull request.
 - Follow [Capture](node_modules/@mapringg/standard/.claude/skills/capture/SKILL.md) when preparing pull request evidence.
-- Use [Monorepo development](.claude/skills/develop-monorepo/SKILL.md) to build or deploy an app.
