@@ -1,4 +1,4 @@
-# Marketing
+# AGENTS.md
 
 ## Rules
 

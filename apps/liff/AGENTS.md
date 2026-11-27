@@ -1,4 +1,4 @@
-# LIFF
+# AGENTS.md
 
 ## Rules
 
