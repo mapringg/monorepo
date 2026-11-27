@@ -22,9 +22,13 @@ jobs:
       - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      # The leak scan runs in the background and the last step reads its result.
+      # The leak scan reads a copy of the checkout, so files that later steps write stay out
+      # of it. It pulls and runs in the background, and the last step reads its result.
       - name: Start the leak scan
-        run: docker run --detach --name gitleaks -v "$PWD:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact > /dev/null
+        run: |
+          scan="$RUNNER_TEMP/scan"
+          git worktree add --detach --quiet "$scan" HEAD
+          docker run --detach --name gitleaks -v "$scan:/repo:ro" ghcr.io/gitleaks/gitleaks:v8.30.1 dir /repo --no-banner --redact > "$RUNNER_TEMP/gitleaks-start.log" 2>&1 &
       - uses: ./.github/actions/setup
       # Editing the title or body reruns Check for standard/pr-check. If this commit already
       # passed Check, only the PR check needs to run again.
@@ -99,6 +103,11 @@ jobs:
       - name: Leak scan
         if: always()
         run: |
+          for _ in $(seq 120); do
+            docker inspect --format '{{.Id}}' gitleaks > /dev/null 2>&1 && break
+            sleep 1
+          done
+          docker inspect --format '{{.Id}}' gitleaks > /dev/null 2>&1 || { cat "$RUNNER_TEMP/gitleaks-start.log"; exit 1; }
           status=$(docker wait gitleaks)
           docker logs gitleaks
           docker rm gitleaks > /dev/null
