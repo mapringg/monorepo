@@ -342,8 +342,8 @@ importers:
   .:
     devDependencies:
       '@mapringg/standard':
-        specifier: github:mapringg/standard#v1.15.1
-        version: https://codeload.github.com/mapringg/standard/tar.gz/8329376f21ce399545ec285afca58cc2d9dde5e9(knip@6.45.1)(oxfmt@0.79.0(@astrojs/compiler-rs@0.5.3))(oxlint@1.94.0)(tsrs@0.25.0-ts7.1.0-beta)
+        specifier: github:mapringg/standard#v1.15.2
+        version: https://codeload.github.com/mapringg/standard/tar.gz/147acc81d9f83faf54eccefc5ce97478d6fc84f0(knip@6.45.1)(oxfmt@0.79.0(@astrojs/compiler-rs@0.5.3))(oxlint@1.94.0)(tsrs@0.25.0-ts7.1.0-beta)
       knip:
         specifier: 'catalog:'
         version: 6.45.1
@@ -2463,9 +2463,9 @@ packages:
   '@line/liff@2.32.0':
     resolution: {integrity: sha512-fMNXNCkSjmH+ZVvQmb9P8eoGcx8LH2uf76+kwVdxvTt4TnWlF3UffKzeSdxvIjXvSVTYZIqHvfsROrEtqAcmUQ==}
 
-  '@mapringg/standard@https://codeload.github.com/mapringg/standard/tar.gz/8329376f21ce399545ec285afca58cc2d9dde5e9':
-    resolution: {gitHosted: true, integrity: sha512-R/LXpnx8n5DlvPGqlvqFU9Dt5AikPOw2xhq5Hv0NmM01n2zX9BMRsasa+5tomBMKXMDGs9MWws0eYna0mBWodg==, tarball: https://codeload.github.com/mapringg/standard/tar.gz/8329376f21ce399545ec285afca58cc2d9dde5e9}
-    version: 1.15.1
+  '@mapringg/standard@https://codeload.github.com/mapringg/standard/tar.gz/147acc81d9f83faf54eccefc5ce97478d6fc84f0':
+    resolution: {gitHosted: true, integrity: sha512-XVNgL2zg74Mw77+kO/EImGJcyqCdCpss4Wbd+/20Fl+y3/l7ltgihnro7w6OUUSnxLe9ZX/SbLQB57MzfKRaTg==, tarball: https://codeload.github.com/mapringg/standard/tar.gz/147acc81d9f83faf54eccefc5ce97478d6fc84f0}
+    version: 1.15.2
     engines: {node: '>=26'}
     hasBin: true
     peerDependencies:
@@ -11066,7 +11066,7 @@ snapshots:
       - debug
       - supports-color
 
-  '@mapringg/standard@https://codeload.github.com/mapringg/standard/tar.gz/8329376f21ce399545ec285afca58cc2d9dde5e9(knip@6.45.1)(oxfmt@0.79.0(@astrojs/compiler-rs@0.5.3))(oxlint@1.94.0)(tsrs@0.25.0-ts7.1.0-beta)':
+  '@mapringg/standard@https://codeload.github.com/mapringg/standard/tar.gz/147acc81d9f83faf54eccefc5ce97478d6fc84f0(knip@6.45.1)(oxfmt@0.79.0(@astrojs/compiler-rs@0.5.3))(oxlint@1.94.0)(tsrs@0.25.0-ts7.1.0-beta)':
     dependencies:
       '@shadcn/lint': 0.2.5
       knip: 6.45.1
