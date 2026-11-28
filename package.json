@@ -11,7 +11,7 @@
     "test": "pnpm -r --if-present test"
   },
   "devDependencies": {
-    "@mapringg/standard": "github:mapringg/standard#v1.15.1",
+    "@mapringg/standard": "github:mapringg/standard#v1.15.2",
     "knip": "catalog:",
     "oxfmt": "catalog:",
     "oxlint": "catalog:",

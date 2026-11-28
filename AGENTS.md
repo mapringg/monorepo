@@ -6,7 +6,7 @@
 - Pin shared dependencies in the workspace catalog.
 - Send user-facing strings through `t()`.
 - Run `pnpm lint`, `pnpm knip` and `pnpm test` before pushing.
-- Run `pnpm --filter <app> exec vitest run --since-last-run` after each change, then `pnpm test`.
+- Run `pnpm --filter <app> exec vitest run --since-last-run` after each change and `pnpm test` at the end.
 - Use the reusable deploy workflow for each environment.
 
 ## Sources
