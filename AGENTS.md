@@ -1,12 +1,12 @@
-# Monorepo
-
-Follow `@mapringg/standard`; `pnpm lint` enforces it. Read the `AGENTS.md` of every app you change.
+# AGENTS.md
 
 ## Rules
 
-- Pin shared dependencies once, in the workspace catalog.
-- Send every string a user reads through `t()`.
+- Follow `@mapringg/standard` and read the scoped instructions for each app you change.
+- Pin shared dependencies in the workspace catalog.
+- Send user-facing strings through `t()`.
 - Run `pnpm lint`, `pnpm knip` and `pnpm test` before pushing.
+- Use the reusable deploy workflow for each environment.
 
 ## Sources
 

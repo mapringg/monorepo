@@ -1,4 +1,4 @@
-# Web
+# AGENTS.md
 
 ## Rules
 

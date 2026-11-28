@@ -1,4 +1,4 @@
-# Mobile
+# AGENTS.md
 
 ## Rules
 

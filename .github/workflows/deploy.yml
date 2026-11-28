@@ -21,7 +21,6 @@ jobs:
     steps:
       - uses: actions/checkout@v5
       - uses: ./.github/actions/setup
-      # Each commit saves its own cache and restores the newest one, so shared code changes count too.
       - uses: actions/cache@v5
         with:
           path: apps/web/.next/cache
